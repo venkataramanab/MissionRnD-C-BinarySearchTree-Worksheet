@@ -25,7 +25,8 @@ Nodes 1 and 20 need to be fixed here .
 #include <stdio.h>
 #include <stdlib.h>
 
-
+void swap_nodes(struct node *a, struct node *b);
+void helperFunc2(struct node *root, struct node **temp, struct node **ptr1, struct node **ptr2);
 struct node{
 	struct node * left;
 	int data;
@@ -33,5 +34,28 @@ struct node{
 };
 
 void fix_bst(struct node *root){
-
+	if (root == NULL)
+		return;
+	struct node *ptr1 = NULL, *ptr2 = NULL;
+	struct node **parentData=(struct node **)malloc(sizeof(node));
+	*parentData = NULL;
+	helperFunc2(root, parentData, &ptr1, &ptr2);
+	swap_nodes(ptr1, ptr2);
+}
+void helperFunc2(struct node *root, struct node **temp, struct node **ptr1, struct node **ptr2){
+	if (root){
+		helperFunc2(root->left, temp, ptr1, ptr2);
+		if ((*temp) && (root->data < (*temp)->data)){
+			if (*ptr1 == NULL)
+				*ptr1 = *temp;
+				*ptr2 = root;
+		}
+		*temp = root;
+		helperFunc2(root->right, temp, ptr1, ptr2);
+	}
+}
+void swap_nodes(struct node *a, struct node *b){
+	int temp = a->data;
+	a->data = b->data;
+	b->data = temp;
 }
